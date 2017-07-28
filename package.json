@@ -1,0 +1,27 @@
+{
+  "name": "moneysafe",
+  "version": "1.0.0",
+  "description": "Convenient, safe money calculations in JS",
+  "main": "source/index.js",
+  "scripts": {
+    "test": "node source/index.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericelliott/moneysafe.git"
+  },
+  "keywords": [
+    "money",
+    "finance",
+    "shopping",
+    "currency",
+    "dollars",
+    "cents"
+  ],
+  "author": "Eric Elliott",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericelliott/moneysafe/issues"
+  },
+  "homepage": "https://github.com/ericelliott/moneysafe#readme"
+}
