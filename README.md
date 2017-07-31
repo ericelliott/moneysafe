@@ -94,7 +94,7 @@ $.cents(20).$; // 0.2
 
 ## money.$
 
-Get the value in dollars, rounded to the nearest cent:
+Get the value in dollars, rounded to the nearest cent.
 
 ```js
 $.cents(120.3).$; // 1.2
@@ -110,6 +110,15 @@ $(20).toString(); // "$20.00"
 ```
 
 > Warning: This isn't a properly localized currency string suitable for display to users. Please use a good i18n library and/or exchange rate API to convert to localized currency.
+
+
+## in$
+
+Take a numerical value in cents and convert to a numerical value in dollars, rounded to the nearest cent.
+
+```$
+in$(cents: n) => dollars: Number
+```
 
 Since Money$afe allows you to use normal math operators, which work in cents, there's another convenient way to convert the result back to dollars:
 
