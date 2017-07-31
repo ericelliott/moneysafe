@@ -51,11 +51,20 @@ You can always round to the nearest cent whenever you need to: `$(.001) + $(.002
 
 It works by storing and acting on the amounts in cents instead of dollars, which reduces the floating point rounding errors you get when you represent them as decimal dollars. Of course, you'll still get rounding errors with lots of multiplication and division, but errors are less common and less significant when scaled to cents.
 
-The real value is stored inside an object, so you can't just compare it with `===`. The special `.cents` getter exposes the value in cents. There's also a convenient way to convert cents to `m$`, and a `.$` getter to get the value in dollars:
+The real value is stored inside an object, so you can't just compare it with `===`. The special `.cents` getter exposes the value in cents.
 
 ```js
 $.cents(20).$; // 0.2
 ```
+
+## money.$
+
+Get the value in dollars, rounded to the nearest cent:
+
+```js
+$.cents(120.3).$; // 1.2
+```
+
 
 ## money.toString()
 
