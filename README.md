@@ -47,6 +47,41 @@ The actual value is stored with full floating point precision to give you more h
 You can always round to the nearest cent whenever you need to: `$(.001) + $(.002) === $(.003).round().cents`.
 
 
+## Getting Started
+
+Install moneysafe:
+
+```js
+npm install --save moneysafe
+```
+
+Import the functions you need:
+
+```js
+import { $ } from 'moneysafe';
+import { $$, subtractPercent, addPercent } from 'moneysafe/ledger';
+```
+
+OR:
+
+```js
+const { $ } = require('moneysafe');
+const { $$, subtractPercent, addPercent } = require('moneysafe/ledger');
+```
+
+Enjoy:
+
+```
+$$(
+  $(40),
+  $(60),
+  // subtract discount
+  subtractPercent(20),
+  // add tax
+  addPercent(10)
+).$; // 88
+```
+
 ## How does Money$afe work?
 
 It works by storing and acting on the amounts in cents instead of dollars, which reduces the floating point rounding errors you get when you represent them as decimal dollars. Of course, you'll still get rounding errors with lots of multiplication and division, but errors are less common and less significant when scaled to cents.
