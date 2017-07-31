@@ -2,9 +2,13 @@
   "name": "moneysafe",
   "version": "1.0.0",
   "description": "Convenient, safe money calculations in JS",
-  "main": "source/index.js",
+  "main": "source/moneysafe.js",
   "scripts": {
-    "test": "node source/index.test.js"
+    "lint": "eslint source && echo 'Lint complete.'",
+    "test": "node source/index.test.js",
+    "watch": "watch 'clear && npm run -s test && npm run lint' source",
+    "verify": "npm run -s test && npm run -s lint",
+    "precommit": "npm run verify"
   },
   "repository": {
     "type": "git",
@@ -23,5 +27,13 @@
   "bugs": {
     "url": "https://github.com/ericelliott/moneysafe/issues"
   },
-  "homepage": "https://github.com/ericelliott/moneysafe#readme"
+  "homepage": "https://github.com/ericelliott/moneysafe#readme",
+  "devDependencies": {
+    "eslint": "4.3.0",
+    "tape": "4.7.0",
+    "watch": "1.0.2"
+  },
+  "dependencies": {
+    "lodash.flow": "3.5.0"
+  }
 }
