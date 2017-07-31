@@ -57,6 +57,8 @@ The real value is stored inside an object, so you can't just compare it with `==
 $.cents(20).$; // 0.2
 ```
 
+## money.toString()
+
 For debugging, you can easily see the value stored in a money safe using `.toString()`, rounded to the cent using fixed precision:
 
 ```js
