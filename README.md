@@ -86,13 +86,103 @@ $$(
 
 It works by storing and acting on the amounts in cents instead of dollars, which reduces the floating point rounding errors you get when you represent them as decimal dollars. Of course, you'll still get rounding errors with lots of multiplication and division, but errors are less common and less significant when scaled to cents.
 
-The real value is stored inside an object, so you can't just compare it with `===`. The special `.cents` getter exposes the value in cents.
+## $(dollars) => Money
+
+The `$()` factory takes a value in dollars and lifts it into the money object type:
 
 ```js
+$(20).cents; // 2000
+```
+
+Once a value is represented as money, you can operate on it using normal JavaScript operators. The resulting value will be in cents:
+
+```js
+$(20) / 2; // 1000 cents
+```
+
+## in$ Utility
+
+Take a numerical value in cents and convert to a numerical value in dollars, rounded to the nearest cent.
+
+```$
+in$(cents: n) => dollars: Number
+```
+
+Since Money$afe allows you to use normal math operators, which work in cents, `in$()` is a convenient way to convert the result back to dollars:
+
+```js
+import { in$, $ } from 'moneysafe';
+
+in$($(20) / 2) // 10
+```
+
+### $ Static Props
+
+#### $.cents(cents: n) => Money
+
+Alias for `$.of`. Takes a value in cents and lifts it into the money object type:
+
+```js
+$.of(20).$; // 0.2
 $.cents(20).$; // 0.2
 ```
 
-## money.$
+## The Money Type
+
+The Money type is a function object returned by the `$()` factory. The type itself is a function that takes money in cents and returns a new money object with the sum of the instance value + input:
+
+```js
+money(cents: n) => money
+```
+
+```js
+const a = $(20);
+const b = $(10);
+
+const c = a(b);
+console.log(c.$); // 30
+```
+
+The result is that standard function composition acts like addition. The following are equivalent:
+
+```js
+import pipe from 'lodash.flow';
+import { $, in$ } from 'moneysafe';
+
+{
+  const a = $(20);
+  const b = $(10);
+
+  const c = a(b);
+  console.log(c.$); // 30
+}
+
+{
+  const c = pipe(
+    $(20),
+    $(10)
+  )($(0));
+
+  console.log(c.$);
+}
+```
+
+This is what makes the handy ledger syntax possible. `$$` is just a thin wrapper around a standard function composition:
+
+```js
+import { $$ } from 'moneysafe/ledger';
+
+$$(
+  $(40),
+  $(60),
+  // subtract discount
+  subtractPercent(20),
+  // add tax
+  addPercent(10)
+).$; // 88
+```
+
+### money.$
 
 Get the value in dollars, rounded to the nearest cent.
 
@@ -100,8 +190,33 @@ Get the value in dollars, rounded to the nearest cent.
 $.cents(120.3).$; // 1.2
 ```
 
+### money.cents
 
-## money.toString()
+Get the value in cents (not rounded).
+
+```js
+$(1.333).cents; // 133.29999999999998
+```
+
+> Note: IEEE 754 floating point is unable to accurately represent certain decimal values, such as `1.333 * 100`. `money.cents` does not round by default in order to preserve full floating-point precision during calculations. For maximum accuracy, keep the value in unrounded cents until it's time to dispaly the result. Moneysafe is accurate to the cent, and fairly accurate up to ~16 digits. You should probably round to the precision you require after you've performed all the calculations you need. See `money.round()`.
+
+### money.round()
+
+Returns a new money object, rounded to the nearest cent:
+
+```js
+money.round() => money
+```
+
+```js
+$.cents(100.6).cents // 100.6
+$.cents(100.6).round().cents // 101
+```
+
+> Tip: `money.$` is always rounded to the nearest cent.
+
+
+### money.toString()
 
 For debugging, you can easily see the value stored in a money safe using `.toString()`, rounded to the cent using fixed precision:
 
@@ -112,20 +227,6 @@ $(20).toString(); // "$20.00"
 > Warning: This isn't a properly localized currency string suitable for display to users. Please use a good i18n library and/or exchange rate API to convert to localized currency.
 
 
-## in$
 
-Take a numerical value in cents and convert to a numerical value in dollars, rounded to the nearest cent.
-
-```$
-in$(cents: n) => dollars: Number
-```
-
-Since Money$afe allows you to use normal math operators, which work in cents, there's another convenient way to convert the result back to dollars:
-
-```js
-import { in$, $ } from 'moneysafe';
-
-in$($(20) / 2) // 10
-```
 
 The API is also designed for configurability. Currently, you can change the currency symbol and the number of decimal places to display with the `.toString()` method.
