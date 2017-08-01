@@ -88,7 +88,13 @@ It works by storing and acting on the amounts in cents instead of dollars, which
 
 ## $(dollars) => Money
 
-The `$()` factory takes a value in dollars and lifts it into the money object type:
+The `$()` factory takes a value in dollars and lifts it into the money object type.
+
+```js
+$(cents: n) => money
+```
+
+Example:
 
 ```js
 $(20).cents; // 2000
@@ -118,9 +124,15 @@ in$($(20) / 2) // 10
 
 ### $ Static Props
 
-#### $.cents(cents: n) => Money
+#### $.cents() / $.of()
 
-Alias for `$.of`. Takes a value in cents and lifts it into the money object type:
+Alias for `$.of`. Takes a value in cents and lifts it into the money object type.
+
+```js
+$.cents(cents: n) => Money
+```
+
+Example:
 
 ```js
 $.of(20).$; // 0.2
@@ -135,6 +147,7 @@ The Money type is a function object returned by the `$()` factory. The type itse
 money(cents: n) => money
 ```
 
+Example:
 ```js
 const a = $(20);
 const b = $(10);
@@ -216,17 +229,120 @@ $.cents(100.6).round().cents // 101
 > Tip: `money.$` is always rounded to the nearest cent.
 
 
-### money.toString()
+### money.add()
 
-For debugging, you can easily see the value stored in a money safe using `.toString()`, rounded to the cent using fixed precision:
+Takes an amount in cents and returns a money instance with the sum of the stored value and the amount.
 
 ```js
-$(20).toString(); // "$20.00"
+money.add(cents: n) => money
+```
+
+Example:
+
+```js
+$(10).add($(5)).$ // 15
+$(10).add(500).$ // 15
+```
+
+### money.subtract()
+
+Takes an amount in cents and returns a money instance with the difference between the stored value and the amount.
+
+```js
+money.subtract(cents: n) => money
+```
+
+Example:
+
+```js
+$(10).subtract($(5)).$ // 5
+$(10).subtract(500).$ // 5
+$(0).subtract($(5)).$ // -5
+```
+
+### money.toString()
+
+For debugging, you can easily see the value stored in a money safe using `.toString()`, rounded to the cent using fixed precision.
+
+```js
+money.toString() => String
+```
+
+Example:
+```js
+$(2000).toString(); // "$2000.00"
 ```
 
 > Warning: This isn't a properly localized currency string suitable for display to users. Please use a good i18n library and/or exchange rate API to convert to localized currency.
 
 
+## $$ Ledger
 
+Takes any number of money objects (or functions of type `(cents: n) => money`) and returns a money object containing the sum.
 
-The API is also designed for configurability. Currently, you can change the currency symbol and the number of decimal places to display with the `.toString()` method.
+```js
+$$(...(cents: n) => money) => money
+```
+
+Example:
+
+```
+import { $ } from 'moneysafe';
+import { $$ } from 'moneysafe/ledger';
+
+$$(
+  $(40),
+  $(60),
+  $(-5)
+).$; // 95
+```
+
+### addPercent()
+
+Takes a percent `x` as a number and the current value in cents (curried), and returns a new money object representing the sum of the current value and `x%` of the current value.
+
+```js
+addPercent(percent: n) => (cents: n) => money
+```
+
+Example:
+
+```
+import { $ } from 'moneysafe';
+import { $$, addPercent } from 'moneysafe/ledger';
+
+const total = $$(
+  $(40),
+  $(60),
+  addPercent(10)
+);
+
+console.log(
+  total.$ // 110
+);
+```
+
+### subtractPercent()
+
+Takes a percent `x` as a number and the current value in cents (curried), and returns a new money object representing the difference between the current value and `x%` of the current value.
+
+```js
+subtractPercent(percent: n) => (cents: n) => money
+```
+
+Example:
+
+```
+import { $ } from 'moneysafe';
+import { $$, subtractPercent } from 'moneysafe/ledger';
+
+const total = $$(
+  $(40),
+  $(60),
+  subtractPercent(10)
+);
+
+console.log(
+  total.$ // 90
+);
+```
