@@ -61,8 +61,10 @@ test('$(x).$', assert => {
   assert.same($(1).$, 1, msg);
   assert.same($(10.101).$, 10.10, msg);
   assert.same($(10.106).$, 10.11, msg);
+  assert.same($(-5).$, -5, 'should return correct amounts for negative values.');
   assert.end();
 });
+
 
 test('$(0)', assert => {
   const msg = 'should return money with .cents === 0';
@@ -73,6 +75,7 @@ test('$(0)', assert => {
   assert.same(actual, expected, msg);
   assert.end();
 });
+
 
 test('$(a)(b)', assert => {
   const msg = 'should add a + b in cents';
