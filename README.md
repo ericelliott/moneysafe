@@ -71,7 +71,7 @@ const { $$, subtractPercent, addPercent } = require('moneysafe/ledger');
 
 Enjoy:
 
-```
+```js
 $$(
   $(40),
   $(60),
@@ -286,7 +286,7 @@ $$(...(cents: n) => money) => money
 
 Example:
 
-```
+```js
 import { $ } from 'moneysafe';
 import { $$ } from 'moneysafe/ledger';
 
@@ -307,7 +307,7 @@ addPercent(percent: n) => (cents: n) => money
 
 Example:
 
-```
+```js
 import { $ } from 'moneysafe';
 import { $$, addPercent } from 'moneysafe/ledger';
 
@@ -332,7 +332,7 @@ subtractPercent(percent: n) => (cents: n) => money
 
 Example:
 
-```
+```js
 import { $ } from 'moneysafe';
 import { $$, subtractPercent } from 'moneysafe/ledger';
 
