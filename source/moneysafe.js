@@ -4,7 +4,7 @@ const m$ = ({
   symbol = '$'
 } = {}) => {
   function $ (dollars, {
-    cents = dollars * centsPerDollar,
+    cents = Math.round(dollars * centsPerDollar),
     in$ = Math.round(cents) / centsPerDollar
   } = {}) {
     const add = a$ => $.of(cents + a$);

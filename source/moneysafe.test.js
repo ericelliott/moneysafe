@@ -11,6 +11,16 @@ test('$(dollars)', assert => {
   assert.end();
 });
 
+test('$(dollars) rounding', assert => {
+  const msg = 'should round during dollar lifts';
+
+  const actual = $(.56).cents;
+  const expected = 56;
+
+  assert.same(actual, expected, msg);
+  assert.end();
+});
+
 test('$.cents(x)', assert => {
   const msg = 'should return money with x cents';
 
