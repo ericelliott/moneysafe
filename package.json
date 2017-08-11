@@ -33,7 +33,5 @@
     "tape": "4.7.0",
     "watch": "1.0.2"
   },
-  "dependencies": {
-    "lodash.flow": "3.5.0"
-  }
+  "dependencies": {}
 }
