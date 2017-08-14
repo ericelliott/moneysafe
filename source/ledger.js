@@ -1,4 +1,4 @@
-const pipe = require('lodash.flow');
+const pipe = (...fns) => x => fns.reduce((y, f) => f(y), x);
 
 const $$ = (...fns) => {
   const $ = fns[0].constructor;

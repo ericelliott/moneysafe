@@ -1,27 +1,28 @@
 const m$ = ({
   centsPerDollar = 100,
   decimals = 2,
-  symbol = '$'
+  symbol = '$',
+  round = Math.round
 } = {}) => {
   function $ (dollars, {
-    cents = Math.round(dollars * centsPerDollar),
-    in$ = Math.round(cents) / centsPerDollar
+    cents = round(dollars * centsPerDollar),
+    in$ = round(cents) / centsPerDollar
   } = {}) {
     const add = a$ => $.of(cents + a$);
     const subtract = a$ => $.of(cents - a$);
 
     return Object.assign(add, {
-      get cents () {
+      valueOf () {
         return cents;
       },
-      valueOf () {
-        return this.cents;
+      get cents () {
+        return round(cents);
       },
       get $ () {
         return in$;
       },
       round () {
-        return $.of(Math.round(cents));
+        return $.of(round(cents));
       },
       add,
       subtract,
@@ -33,7 +34,7 @@ const m$ = ({
   }
 
   $.of = cents => $(undefined, { cents });
-  $.cents = $.of;
+  $.cents = cents => $.of(round(cents));
 
   return $;
 };

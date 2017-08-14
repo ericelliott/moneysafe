@@ -14,7 +14,7 @@ test('$(dollars)', assert => {
 test('$(dollars) rounding', assert => {
   const msg = 'should round during dollar lifts';
 
-  const actual = $(.56).cents;
+  const actual = $(.56).valueOf();
   const expected = 56;
 
   assert.same(actual, expected, msg);
@@ -24,7 +24,27 @@ test('$(dollars) rounding', assert => {
 test('$.cents(x)', assert => {
   const msg = 'should return money with x cents';
 
-  const actual = $.cents(10).cents;
+  const actual = $.cents(10).valueOf();
+  const expected = 10;
+
+  assert.same(actual, expected, msg);
+  assert.end();
+});
+
+test('$.cents(x)', assert => {
+  const msg = 'should round to nearest cent';
+
+  const actual = $.cents(10.1).valueOf();
+  const expected = 10;
+
+  assert.same(actual, expected, msg);
+  assert.end();
+});
+
+test('$(x).cents', assert => {
+  const msg = 'should return cents rounded to nearest cent';
+
+  const actual = $.of(10.1).cents;
   const expected = 10;
 
   assert.same(actual, expected, msg);
@@ -45,7 +65,7 @@ test('$.of(.1) + $.of(.2)', assert => {
   const msg = 'should retain floating point precision for cent fractions';
 
   const actual = $.of(.1) + $.of(.2);
-  const expected = $.of(0.30000000000000004).cents;
+  const expected = $.of(0.30000000000000004).valueOf();
 
   assert.same(actual, expected, msg);
   assert.end();
