@@ -105,7 +105,7 @@ It works by storing and acting on the amounts in cents instead of dollars, which
 The `$()` factory takes a value in dollars and lifts it into the money object type.
 
 ```js
-$(cents: n) => money
+$(dollars: n) => money
 ```
 
 Example:
