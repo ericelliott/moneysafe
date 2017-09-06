@@ -105,7 +105,7 @@ It works by storing and acting on the amounts in cents instead of dollars, which
 The `$()` factory takes a value in dollars and lifts it into the money object type.
 
 ```js
-$(dollars: n) => money
+$(dollars: n) => Money
 ```
 
 Example:
@@ -176,7 +176,7 @@ $.cents(.1 + .2).valueOf(); // 0
 The Money type is a function object returned by the `$()` factory. The type itself is a function that takes money in cents and returns a new money object with the sum of the instance value + input:
 
 ```js
-money(cents: n) => money
+money(cents: n) => Money
 ```
 
 Example:
@@ -253,7 +253,7 @@ $(1/3).cents; // 33
 Returns a new money object, **rounded to the nearest cent:**
 
 ```js
-money.round() => money
+money.round() => Money
 ```
 
 ```js
@@ -269,7 +269,7 @@ $.of(100.6).round().valueOf() // 101
 Takes an amount in cents and returns a money instance with the sum of the stored value and the amount.
 
 ```js
-money.add(cents: n) => money
+money.add(cents: n) => Money
 ```
 
 Example:
@@ -284,7 +284,7 @@ $(10).add(500).$ // 15
 Takes an amount in cents and returns a money instance with the difference between the stored value and the amount.
 
 ```js
-money.subtract(cents: n) => money
+money.subtract(cents: n) => Money
 ```
 
 Example:
@@ -313,10 +313,10 @@ $(2000).toString(); // "$2000.00"
 
 ## $$ Ledger
 
-Takes any number of money objects (or functions of type `(cents: n) => money`) and returns a money object containing the sum.
+Takes any number of money objects (or functions of type `(cents: n) => Money`) and returns a money object containing the sum.
 
 ```js
-$$(...(cents: n) => money) => money
+$$(...(cents: n) => Money) => Money
 ```
 
 Example:
@@ -337,7 +337,7 @@ $$(
 Takes a percent `x` as a number and the current value in cents (curried), and returns a new money object representing the sum of the current value and `x%` of the current value.
 
 ```js
-addPercent(percent: n) => (cents: n) => money
+addPercent(percent: n) => (cents: n) => Money
 ```
 
 Example:
@@ -362,7 +362,7 @@ console.log(
 Takes a percent `x` as a number and the current value in cents (curried), and returns a new money object representing the difference between the current value and `x%` of the current value.
 
 ```js
-subtractPercent(percent: n) => (cents: n) => money
+subtractPercent(percent: n) => (cents: n) => Money
 ```
 
 Example:
