@@ -29,12 +29,24 @@ const m$ = ({
       constructor: $,
       toString () {
         return `${ symbol }${ this.$.toFixed(decimals) }`;
+      },
+      toJSON () {
+        return this.toString();
       }
     });
   }
 
   $.of = cents => $(undefined, { cents });
   $.cents = cents => $.of(round(cents));
+  $.parse = (str) => {
+    try {
+      const pattern = /^([^\d\s]{1,3})?(\d+(?:\.\d+)?)$/;
+      const [ignore, symbol, amount] = str.match(pattern);
+      return m$({symbol})(amount);
+    } catch (err) {
+      throw new Error(`Invalid money format: '${str}'`);
+    }
+  }
 
   return $;
 };
