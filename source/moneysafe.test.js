@@ -188,6 +188,63 @@ test('$(x).toString()', assert => {
   assert.end();
 });
 
+test('$(x).toJSON()', assert => {
+  const msg = 'should return JSON representation of the value';
+
+  const actual = $(10.10).toJSON();
+  const expected = '$10.10';
+
+  assert.same(actual, expected, msg);
+  assert.end();
+});
+
+test('JSON.stringify({ money: $(x) })', assert => {
+  const msg = 'should return JSON representation of an object containing money object';
+
+  const actual = JSON.stringify({ money: $(10.10) });
+  const expected = '{"money":"$10.10"}';
+
+  assert.same(actual, expected, msg);
+  assert.end();
+});
+
+test('$.parse(x))', assert => {
+  const msg = 'should return deserialized money object';
+
+  {
+    const actual = $.parse('$3.18').toString();
+    const expected = '$3.18';
+    assert.same(actual, expected, msg);
+  }
+
+  {
+    const actual = $.parse('65').toString();
+    const expected = '$65.00';
+    assert.same(actual, expected, msg);
+  }
+
+  {
+    const actual = $.parse('€115.26').toString();
+    const expected = '€115.26';
+    assert.same(actual, expected, msg);
+  }
+
+  {
+    const actual = $.parse('💰1000').toString();
+    const expected = '💰1000.00';
+    assert.same(actual, expected, msg);
+  }
+
+  assert.end();
+});
+
+test('$.parse(x))', assert => {
+  const msg = 'should throw error on invalid money format';
+
+  assert.throws(() => $.parse('100 USD'), Error, msg);
+  assert.end();
+});
+
 test('m$({ symbol: \'#\' })(x).toString()', assert => {
   const msg = 'should return string with custom currency symbol';
   const p = m$({ symbol: '#' });
