@@ -2,7 +2,7 @@
   "name": "moneysafe",
   "version": "1.1.1",
   "description": "Convenient, safe money calculations in JS",
-  "main": "src/moneysafe.js",
+  "main": "src/index.js",
   "scripts": {
     "lint": "eslint --fix src && echo 'Lint complete.'",
     "test": "node -r esm src/index.test.js | tap-nirvana",
