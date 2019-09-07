@@ -2,13 +2,15 @@
   "name": "moneysafe",
   "version": "1.1.1",
   "description": "Convenient, safe money calculations in JS",
-  "main": "source/moneysafe.js",
+  "main": "src/moneysafe.js",
   "scripts": {
-    "lint": "eslint source && echo 'Lint complete.'",
-    "test": "node source/index.test.js",
-    "watch": "watch 'clear && npm run -s test && npm run lint' source",
+    "lint": "eslint --fix src && echo 'Lint complete.'",
+    "test": "node -r esm src/index.test.js | tap-nirvana",
+    "debug-test": "node --inspect-brk -r esm src/index.test.js",
+    "watch": "watch 'clear && npm run -s lint && npm run -s test' src",
     "verify": "npm run -s test && npm run -s lint",
-    "precommit": "npm run verify"
+    "precommit": "npm run verify",
+    "update": "updtr"
   },
   "repository": {
     "type": "git",
@@ -29,9 +31,17 @@
   },
   "homepage": "https://github.com/ericelliott/moneysafe#readme",
   "devDependencies": {
-    "eslint": "6.1.0",
-    "tape": "4.7.0",
+    "eslint": "6.3.0",
+    "eslint-config-prettier": "6.2.0",
+    "eslint-plugin-prettier": "3.1.0",
+    "esm": "3.2.25",
+    "prettier": "1.18.2",
+    "riteway": "6.1.0",
+    "tap-nirvana": "1.1.0",
+    "updtr": "3.1.0",
     "watch": "1.0.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "bignumber.js": "8.1.1"
+  }
 }
