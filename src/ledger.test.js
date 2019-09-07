@@ -5,8 +5,13 @@ import { $$, addPercent, subtractPercent } from './ledger';
 
 describe('$$', async assert => {
   const should = 'total $(x) amounts';
-  // prettier ignore
-  const actual = $$($('40'), $('60'), $('-5')).toString();
+  /* eslint-disable */
+  const actual = $$(
+    $('40'),
+    $('60'),
+    $('-5')
+  ).toString();
+  /* eslint-enable */
 
   const expected = $(95).toString();
 
@@ -21,7 +26,12 @@ describe('$$', async assert => {
 describe('addPercent(percent)', async assert => {
   const should = 'add percents to the total';
 
-  const actual = $$($(50), addPercent(50)).toString();
+  /* eslint-disable */
+  const actual = $$(
+    $(50),
+    addPercent(50)
+  ).toString();
+  /* eslint-enable */
   const expected = $(75).toString();
 
   assert({
@@ -35,7 +45,12 @@ describe('addPercent(percent)', async assert => {
 describe('subtract(percent)', async assert => {
   const should = 'subtract percents from the total';
 
-  const actual = $$($(50), subtractPercent(50)).toString();
+  /* eslint-disable */
+  const actual = $$(
+    $(50),
+    subtractPercent(50)
+  ).toString();
+  /* eslint-enable */
   const expected = $(25).toString();
 
   assert({
