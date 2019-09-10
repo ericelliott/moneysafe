@@ -45,6 +45,7 @@ describe('Arithmetic utilities: add, multiply, divide', async assert => {
       expected
     });
   }
+
   {
     const actual = multiply($(2), $(4)).toString();
     const expected = $(8).toString();

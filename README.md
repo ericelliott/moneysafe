@@ -15,12 +15,12 @@ Why? Because JavaScript Numbers are IEEE 754 64-bit floating point. The result i
 ```js
 .2 + .1 === .3; // false
 ```
-However, this problem effectively goes away if you perform the same calculations in cents. Money$afe converts your dollar values into cents and then exposes them to the normal JavaScript math operators, so you can use `+`, `-`, `*`, `/` as you normally would.
+However, this problem effectively goes away if you perform the same calculations in arbitrary precision units. Money$afe converts your dollar values into BigNumbers and then exposes arithetic operations like add, multiply, and divide.
 
 With Money$afe:
 
 ```js
-$(.1) + $(.2) === $(.3).cents;
+add($(.1), $(.2)).toNumber() === $(.3).toNumber();
 ```
 
 Even better. There's a convenient ledger form for common calculations like shopping carts:
@@ -33,32 +33,19 @@ $$(
   subtractPercent(20),
   // add tax
   addPercent(10)
-).$; // 88
+).toNumber(); // 88
 ```
 
 ### Known Issues
 
-This code was written in ES6, and no attempt has been made to compile it for older browsers. This should not be a problem in any modern evergreen browser, but it will likely throw errors in old IE and old versions of Safari. You have been warned.
+This code was written in ES6, and no attempt has been made to compile it for older browsers. This should not be a problem in any modern evergreen browser, but it will likely throw errors in old IE and old versions of Safari. You have been warned. If you want to run the code in other browsers, you'll need to compile to ES5 yourself.
 
-This code scales money calculations to operate on cents automatically, but fractions of cents are still represented in IEEE 754 floating point, which means that `$.of(.1) + $.of(.2) !== $.of(.3).valueOf()`. IEEE 754 can't accurately represent the value, so it rounds to `0.30000000000000004`.
-
-Values are stored with full floating point precision to give you more headroom for complex financial calculations which require more decimal digits.
-
-That's intentional. By preserving the full floating point precision, you get roughly 16 digits of fractional cent precision for headroom, which minimizes the impact of cumulative rounding errors for more complex calculations.
-
-When you use `$.of()` to directly lift cents into the money type, and `money.valueOf()` (or any of the native JS math operators) to get values out, you get the full range of precision, unrounded.
-
-Usually, you will want those values rounded to the nearest cent, so when you use the convenient `$` and `cent` lifts and getters, rounding errors get rounded away:
-
-```
-$(.001) + $(.002) === $(.003).cents
-```
+Values are stored in arbitrary precision using BigNumber, so you can perform accurate calculations for cryptocurrencies such as Bitcoin or Ethereum which have 8 and 18 decimal precision, respectively. By way of contrast, JavaScript's native number type is IEEE 754 with 16 digits of decimal precision.
 
 To recap:
 
-* By default, all math operations automatically use the full range of precision using `$.of()` and `money.valueOf()`.
-* If you want to round to the nearest cent when you lift the initial value into the type, use `$(x)` or `$.cents(x)`.
-* If you want to round the value to the nearest cent to display to users or charge accounts, use the `money.$` or `money.cents` getters.
+* By default, all math operations automatically use arbitrary precision big numbers internally.
+* You can get the value in a number type using `.toNumber()`.
 
 
 ## Getting Started
@@ -93,7 +80,7 @@ $$(
   subtractPercent(20),
   // add tax
   addPercent(10)
-).$; // 88
+).toNumber(); // 88
 ```
 
 ## How does Money$afe work?
@@ -227,13 +214,6 @@ $$(
 ).$; // 88
 ```
 
-### money.$
-
-Get the value in dollars. **Rounded to the nearest cent.**
-
-```js
-$.of(120.3).$; // 1.2
-```
 
 ### money.cents
 
@@ -261,43 +241,54 @@ $.of(100.6).valueOf() // 100.6
 $.of(100.6).round().valueOf() // 101
 ```
 
-> Tip: `money.$` and `money.cents` always rounded to the nearest cent. You should rarely need to manually call `.round()`.
-
 
 ### money.add()
 
-Takes an amount in cents and returns a money instance with the sum of the stored value and the amount.
+Takes an amount and returns a money instance with the sum of the stored value and the amount.
 
 ```js
-money.add(cents: n) => Money
+money.add(amount: Money) => Money
 ```
 
 Example:
 
 ```js
-$(10).add($(5)).$ // 15
-$(10).add(500).$ // 15
+$(10).add($(5)).toNumber() // 15
 ```
 
 ### money.subtract()
 
-Takes an amount in cents and returns a money instance with the difference between the stored value and the amount.
+Takes an amount and returns a money instance with the difference between the stored value and the amount.
 
 ```js
-money.subtract(cents: n) => Money
+money.subtract(amount: Money) => Money
 ```
 
 Example:
 
 ```js
-$(10).subtract($(5)).$ // 5
-$(10).subtract(500).$ // 5
-$(0).subtract($(5)).$ // -5
+$(10).subtract($(5)).toNumber() // 5
+$(10).subtract(500).toNumber() // 5
+$(0).subtract($(5)).toNumber() // -5
 ```
+
+### money.toNumber()
+
+You can easily convert the internal value into a JavaScript number using `.toNumber()`.
+
+```js
+money.toNumber() => Number
+```
+
+Example:
+```js
+$(2000).toNumber(); // 2000
+```
+
 
 ### money.toString()
 
-For debugging, you can easily see the value stored in a money safe using `.toString()`, **rounded to the cent using fixed precision.**
+You can easily convert the internal value into a string using `.toString()`.
 
 ```js
 money.toString() => String
@@ -305,7 +296,7 @@ money.toString() => String
 
 Example:
 ```js
-$(2000).toString(); // "$2000.00"
+$(2000).toString(); // "2000"
 ```
 
 > Warning: This isn't a properly localized currency string suitable for display to users. Please use a good i18n library and/or exchange rate API to convert to localized currency.
@@ -313,10 +304,10 @@ $(2000).toString(); // "$2000.00"
 
 ## $$ Ledger
 
-Takes any number of money objects (or functions of type `(cents: n) => Money`) and returns a money object containing the sum.
+Takes any number of money objects (or functions of type `Money => Money`) and returns a money object containing the sum.
 
 ```js
-$$(...(cents: n) => Money) => Money
+$$(...Money) => Money
 ```
 
 Example:
@@ -329,7 +320,7 @@ $$(
   $(40),
   $(60),
   $(-5)
-).$; // 95
+).toNumber(); // 95
 ```
 
 ### addPercent()
@@ -337,7 +328,7 @@ $$(
 Takes a percent `x` as a number and the current value in cents (curried), and returns a new money object representing the sum of the current value and `x%` of the current value.
 
 ```js
-addPercent(percent: n) => (cents: n) => Money
+addPercent(percent: n) => (amount: Money) => Money
 ```
 
 Example:
@@ -353,7 +344,7 @@ const total = $$(
 );
 
 console.log(
-  total.$ // 110
+  total.toNumber() // 110
 );
 ```
 
@@ -362,7 +353,7 @@ console.log(
 Takes a percent `x` as a number and the current value in cents (curried), and returns a new money object representing the difference between the current value and `x%` of the current value.
 
 ```js
-subtractPercent(percent: n) => (cents: n) => Money
+subtractPercent(percent: n) => (Money) => Money
 ```
 
 Example:
@@ -378,6 +369,6 @@ const total = $$(
 );
 
 console.log(
-  total.$ // 90
+  total.toNumber() // 90
 );
 ```

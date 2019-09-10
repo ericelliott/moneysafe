@@ -8,11 +8,6 @@ const createCurrency = ({ decimals }) => {
     const times = b => of(value.multipliedBy(of(b)));
     const div = b => of(value.dividedBy(of(b)));
 
-    const roundTo = (precision = 0.5, x) => {
-      var y = x.plus(precision / 2);
-      return y.minus(y.div(precision));
-    };
-
     return Object.assign(plus, {
       [MoneySafe]: true,
       constructor: of,
@@ -25,11 +20,9 @@ const createCurrency = ({ decimals }) => {
       div,
       dividedBy: div,
       minus: b => of(value.minus(of(b))),
-      toFixed: decimals => value.toPrecision(decimals),
-      toString: () => value.toFixed(decimals),
-      get cents() {
-        return roundTo(2, value).toNumber;
-      }
+      toFixed: (digits = decimals) => value.toFixed(digits),
+      toNumber: () => value.toNumber,
+      toString: () => value.toFixed(decimals)
     });
   };
   of.of = of;
