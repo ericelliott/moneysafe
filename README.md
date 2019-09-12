@@ -230,7 +230,7 @@ $(0).minus($(5)).toNumber() // -5
 
 ### money.toNumber(), money.valueOf()
 
-Convert a Money object to JavaScript Number format (IEEE 754 floating point). *Note: JavaScript number precision is limited to 16 decimal digits.*
+Convert a `Money` object to JavaScript Number format (IEEE 754 floating point). *Note: JavaScript number precision is limited to 16 decimal digits.*
 
 ```js
 money.toNumber() => Number
