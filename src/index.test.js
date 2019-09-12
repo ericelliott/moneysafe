@@ -1,8 +1,15 @@
 import describe from 'riteway';
 import './ledger.test.js';
-import { ethereum as $, add, multiply, divide } from './index.js';
+import {
+  ethereum as eth,
+  createCurrency,
+  $,
+  add,
+  multiply,
+  divide
+} from './index.js';
 
-describe('instance.map', async assert => {
+describe('money.map', async assert => {
   {
     const id = x => x;
     const a = $('20');
@@ -30,16 +37,51 @@ describe('instance.map', async assert => {
   }
 });
 
+describe('money.toNumber', async assert => {
+  assert({
+    given: 'no arguments',
+    should: 'return the value as a Number',
+    actual: $(3).toNumber(),
+    expected: 3
+  });
+});
+
 describe('Arithmetic utilities: add, multiply, divide', async assert => {
   {
+    const actual = add($('0.1'), $('0.2')).toString();
+    const expected = '0.30';
+
+    assert({
+      given: 'two 18-digit precision numbers',
+      should: 'add them correctly',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const $ = createCurrency({ decimals: 9 });
+
+    const actual = add($('0.000000001'), $('0.000000001')).toString();
+    const expected = '0.000000002';
+
+    assert({
+      given: 'two ethereum-precision numbers',
+      should: 'add them correctly',
+      actual,
+      expected
+    });
+  }
+
+  {
     const actual = add(
-      $('0.000000000000000001'),
-      $('0.000000000000000001')
+      eth('0.000000000000000001'),
+      eth('0.000000000000000001')
     ).toString();
     const expected = '0.000000000000000002';
 
     assert({
-      given: 'two 18-digit precision numbers',
+      given: 'two ethereum-precision numbers',
       should: 'add them correctly',
       actual,
       expected
@@ -57,6 +99,7 @@ describe('Arithmetic utilities: add, multiply, divide', async assert => {
       expected
     });
   }
+
   {
     const actual = divide($(8), $(2)).toString();
     const expected = $(4).toString();

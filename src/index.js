@@ -7,12 +7,13 @@ const createCurrency = ({ decimals }) => {
     const plus = b => of(value.plus(of(b)));
     const times = b => of(value.multipliedBy(of(b)));
     const div = b => of(value.dividedBy(of(b)));
+    const toNumber = () => value.toNumber();
 
     return Object.assign(plus, {
       [MoneySafe]: true,
       constructor: of,
       map: f => of(f(value)),
-      valueOf: () => value.toNumber(),
+      valueOf: toNumber,
       plus,
       add: plus,
       times,
@@ -21,7 +22,14 @@ const createCurrency = ({ decimals }) => {
       dividedBy: div,
       minus: b => of(value.minus(of(b))),
       toFixed: (digits = decimals) => value.toFixed(digits),
-      toNumber: () => value.toNumber,
+
+      /**
+       * Convert a Money object to JavaScript Number format (IEEE 754 floating
+       * point). *Note: JavaScript number precision is limited to 16 decimal
+       * digits.*
+       * @return {Number} [description]
+       */
+      toNumber: toNumber,
       toString: () => value.toFixed(decimals)
     });
   };
@@ -30,11 +38,33 @@ const createCurrency = ({ decimals }) => {
 };
 
 const ethereum = createCurrency({ decimals: 18 });
+const $ = createCurrency({ decimals: 2 });
+
+/**
+ * Take any number of money objects and return the sum.
+ * @param {...Money} ns
+ * @returns { Money }
+ */
 const add = (...ns) => ns.reduce((a, b) => a.plus(b));
+
+/**
+ * Take any number of money objects and return the product.
+ * @param {...Money} ns
+ * @returns { Money }
+ */
 const multiply = (...ns) => ns.reduce((a, b) => a.times(b));
-const divide = (a, b) => a.div(b);
+
+/**
+ * Take a dividend and divisor and return the quotient.
+ * @param {Money} dividend
+ * @param {Money} divisor
+ * @returns { Money }
+ */
+const divide = (dividend, divisor) => dividend.div(divisor);
 
 module.exports = {
+  createCurrency,
+  $,
   ethereum,
   add,
   multiply,

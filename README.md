@@ -127,10 +127,10 @@ in$($(20) / 2) // 10
 
 #### $.of()
 
-Takes a value in cents and lifts it into the money object type. **Not rounded.**
+Takes a value and lifts it into the `Money` object type. **Not rounded.**
 
 ```js
-$.of(cents: n) => Money
+$.of(amount) => Money
 ```
 
 Example:
@@ -141,29 +141,13 @@ $.of(1.635).valueOf(); // 1.635
 $.of(.1 + .2).valueOf(); // 0.30000000000000004
 ```
 
-#### $.cents()
-
-Takes a value in cents and lifts it into the money object type. **Rounded to the nearest cent.**
-
-```js
-$.cents(cents: n) => Money
-```
-
-Example:
-
-```js
-$.cents(20.2).valueOf(); // 20
-$.cents(1.635).valueOf(); // 2
-$.cents(.1 + .2).valueOf(); // 0
-```
-
 
 ## The Money Type
 
-The Money type is a function object returned by the `$()` factory. The type itself is a function that takes money in cents and returns a new money object with the sum of the instance value + input:
+The Money type is a function object returned by the `createCurrency` factory. The type itself is a function that takes an amount in number or string format and returns a new `Money` object.
 
 ```js
-money(cents: n) => Money
+money(amount) => Money
 ```
 
 Example:
@@ -172,21 +156,21 @@ const a = $(20);
 const b = $(10);
 
 const c = a(b);
-console.log(c.$); // 30
+console.log(+c); // 30
 ```
 
 The result is that standard function composition acts like addition. The following are equivalent:
 
 ```js
 import pipe from 'lodash.flow';
-import { $, in$ } from 'moneysafe';
+import { $ } from 'moneysafe';
 
 {
   const a = $(20);
   const b = $(10);
 
   const c = a(b);
-  console.log(c.$); // 30
+  console.log(+c); // 30
 }
 
 {
@@ -195,7 +179,7 @@ import { $, in$ } from 'moneysafe';
     $(10)
   )($(0));
 
-  console.log(c.$);
+  console.log(+c);
 }
 ```
 
@@ -204,43 +188,15 @@ This is what makes the handy ledger syntax possible. `$$` is just a thin wrapper
 ```js
 import { $$, subtractPercent, addPercent } from 'moneysafe/ledger';
 
-$$(
++$$(
   $(40),
   $(60),
   // subtract discount
   subtractPercent(20),
   // add tax
   addPercent(10)
-).$; // 88
+) // 88
 ```
-
-
-### money.cents
-
-Get the value in cents. **Rounded to the nearest cent.**
-
-```js
-$.of(1/3).valueOf() // 0.3333333333333333
-$.of(1/3).cents; // 0
-$(1/3).cents; // 33
-```
-
-> Note: No decimal type can accurately represent all fractions, because some fractions would require an infinite number of decimal digits (e.g., `1/3`). `money.valueOf()` does not round by default in order to preserve full floating-point precision during calculations. For maximum accuracy, keep the value in unrounded cents using standard JS operators and/or `.valueOf()` until it's time to display the result.
-
-
-### money.round()
-
-Returns a new money object, **rounded to the nearest cent:**
-
-```js
-money.round() => Money
-```
-
-```js
-$.of(100.6).valueOf() // 100.6
-$.of(100.6).round().valueOf() // 101
-```
-
 
 ### money.add()
 
@@ -256,25 +212,25 @@ Example:
 $(10).add($(5)).toNumber() // 15
 ```
 
-### money.subtract()
+### money.minus()
 
 Takes an amount and returns a money instance with the difference between the stored value and the amount.
 
 ```js
-money.subtract(amount: Money) => Money
+money.minus(amount: Money) => Money
 ```
 
 Example:
 
 ```js
-$(10).subtract($(5)).toNumber() // 5
-$(10).subtract(500).toNumber() // 5
-$(0).subtract($(5)).toNumber() // -5
+$(10).minus($(5)).toNumber() // 5
+$(10).minus(500).toNumber() // 5
+$(0).minus($(5)).toNumber() // -5
 ```
 
-### money.toNumber()
+### money.toNumber(), money.valueOf()
 
-You can easily convert the internal value into a JavaScript number using `.toNumber()`.
+Convert a Money object to JavaScript Number format (IEEE 754 floating point). *Note: JavaScript number precision is limited to 16 decimal digits.*
 
 ```js
 money.toNumber() => Number
@@ -288,7 +244,7 @@ $(2000).toNumber(); // 2000
 
 ### money.toString()
 
-You can easily convert the internal value into a string using `.toString()`.
+Convert a `Money` object to a `String`. *Warning: This isn't a properly localized currency string suitable for display to users. Please use a good i18n library and/or exchange rate API to convert to localized currency.*
 
 ```js
 money.toString() => String
@@ -299,7 +255,71 @@ Example:
 $(2000).toString(); // "2000"
 ```
 
-> Warning: This isn't a properly localized currency string suitable for display to users. Please use a good i18n library and/or exchange rate API to convert to localized currency.
+### money.map()
+
+Apply a function of type `Money => Money` in the context of the Money object.
+This allows you to implement arbitrary operations for Money objects, which you
+can apply by mapping them. *Note: `money.map()` obeys the functor laws.*
+
+```js
+money.map(f: Money => Money) => Money
+```
+
+Example:
+
+```js
+const pow = exp => m => Array.from(
+  { length: exp }, x => m
+).reduce((a, b) => a.times(b));
+
++$(2).map(pow(2)); // 4
+```
+
+
+## Utility functions
+
+## add()
+
+Take any number of money objects and return the sum.
+
+```js
+add(...Money) => Money
+```
+
+Example:
+
+```
+add($('0.1'), $('0.2')).toString() === '0.30'; // true
+```
+
+
+## multiply()
+
+Take any number of money objects and return the product.
+
+```js
+multiply(...Money) => Money
+```
+
+Example:
+
+```js
+multiply($(2), $(4)).toString() === '8.00'; // true
+```
+
+## Divide
+
+Take a dividend and divisor and return the quotient.
+
+```js
+divide(dividend: Money, divisor: Money) => Money
+```
+
+Example:
+
+```js
+divide($(8), $(2)).toString() === '4.00'; // true
+```
 
 
 ## $$ Ledger
