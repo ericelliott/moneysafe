@@ -257,12 +257,12 @@ $(2000).toString(); // "2000"
 
 ### money.map()
 
-Apply a function of type `Money => Money` in the context of the Money object.
+Apply a function of type `BigNumber => BigNumber` in the context of the Money object.
 This allows you to implement arbitrary operations for Money objects, which you
 can apply by mapping them. *Note: `money.map()` obeys the functor laws.*
 
 ```js
-money.map(f: Money => Money) => Money
+money.map(f: BigNumber => BigNumber) => Money
 ```
 
 Example:
