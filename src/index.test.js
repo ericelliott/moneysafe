@@ -6,7 +6,8 @@ import {
   $,
   add,
   multiply,
-  divide
+  divide,
+  equals
 } from './index.js';
 
 describe('money.map', async assert => {
@@ -46,7 +47,7 @@ describe('money.toNumber', async assert => {
   });
 });
 
-describe('Arithmetic utilities: add, multiply, divide', async assert => {
+describe('Arithmetic utilities: add, multiply, divide, equals', async assert => {
   {
     const actual = add($('0.1'), $('0.2')).toString();
     const expected = '0.30';
@@ -107,6 +108,30 @@ describe('Arithmetic utilities: add, multiply, divide', async assert => {
     assert({
       given: 'a dividend and divisor',
       should: 'return the quotient',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = equals($(0.3), $(0.3));
+    const expected = true;
+
+    assert({
+      given: 'two equal values',
+      should: 'return true',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = equals($(0.3), $(42));
+    const expected = false;
+
+    assert({
+      given: 'two different values',
+      should: 'return false',
       actual,
       expected
     });

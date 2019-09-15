@@ -20,6 +20,7 @@ const createCurrency = ({ decimals }) => {
       multipliedBy: times,
       div,
       dividedBy: div,
+      equals: b => value.isEqualTo(of(b)),
       minus: b => of(value.minus(of(b))),
       toFixed: (digits = decimals) => value.toFixed(digits),
 
@@ -62,11 +63,20 @@ const multiply = (...ns) => ns.reduce((a, b) => a.times(b));
  */
 const divide = (dividend, divisor) => dividend.div(divisor);
 
+/**
+ * Takes two money objects and returns whether they are equals.
+ * @param {Money} lhs
+ * @param {Money} lhs
+ * @returns { boolean }
+ */
+const equals = (lhs, rhs) => lhs.equals(rhs);
+
 module.exports = {
   createCurrency,
   $,
   ethereum,
   add,
   multiply,
-  divide
+  divide,
+  equals
 };
