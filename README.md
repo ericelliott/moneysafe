@@ -323,7 +323,7 @@ divide($(8), $(2)).toString() === '4.00'; // true
 
 ## Equals
 
-Takes a left hand side and a right hand side money object and returns whether they are equal.
+Takes a left hand side and a right hand side `Money` object and returns whether they are equal.
 
 ```js
 equals(lhs: Money, rhs: Money) => boolean
