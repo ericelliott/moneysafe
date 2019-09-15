@@ -21,6 +21,10 @@ const createCurrency = ({ decimals }) => {
       div,
       dividedBy: div,
       minus: b => of(value.minus(of(b))),
+      lt: b => value.isLessThan(of(b)),
+      gt: b => value.isGreaterThan(of(b)),
+      lte: b => value.isLessThanOrEqualTo(of(b)),
+      gte: b => value.isGreaterThanOrEqualTo(of(b)),
       toFixed: (digits = decimals) => value.toFixed(digits),
 
       /**
@@ -62,11 +66,47 @@ const multiply = (...ns) => ns.reduce((a, b) => a.times(b));
  */
 const divide = (dividend, divisor) => dividend.div(divisor);
 
+/**
+ * Take a base and a comparand and return whether the comparand is less than the base.
+ * @param {Money} base
+ * @param {Money} comparand
+ * @returns { boolean }
+ */
+const lt = (base, comparand) => base.lt(comparand);
+
+/**
+ * Take a base and a comparand and return whether the comparand is greater than the base.
+ * @param {Money} base
+ * @param {Money} comparand
+ * @returns { boolean }
+ */
+const gt = (base, comparand) => base.gt(comparand);
+
+/**
+ * Take a base and a comparand and return whether the comparand is less than or equal to the base.
+ * @param {Money} base
+ * @param {Money} comparand
+ * @returns { boolean }
+ */
+const lte = (base, comparand) => base.lte(comparand);
+
+/**
+ * Take a base and a comparand and return whether the comparand is greater than or equal to the base.
+ * @param {Money} base
+ * @param {Money} comparand
+ * @returns { boolean }
+ */
+const gte = (base, comparand) => base.gte(comparand);
+
 module.exports = {
   createCurrency,
   $,
   ethereum,
   add,
   multiply,
-  divide
+  divide,
+  lt,
+  gt,
+  lte,
+  gte
 };
