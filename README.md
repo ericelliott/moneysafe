@@ -321,6 +321,21 @@ Example:
 divide($(8), $(2)).toString() === '4.00'; // true
 ```
 
+## Equals
+
+Takes a left hand side and a right hand side money object and returns whether they are equal.
+
+```js
+equals(lhs: Money, rhs: Money) => boolean
+```
+
+Example:
+
+```js
+equals($(0.3), $(0.3)) === true; // true
+equals($(0.3), $(42)) === false; // false
+```
+
 
 ## $$ Ledger
 
