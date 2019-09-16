@@ -21,6 +21,7 @@ const createCurrency = ({ decimals }) => {
       div,
       dividedBy: div,
       minus: b => of(value.minus(of(b))),
+      equals: b => value.isEqualTo(of(b)),
       lt: b => value.isLessThan(of(b)),
       gt: b => value.isGreaterThan(of(b)),
       lte: b => value.isLessThanOrEqualTo(of(b)),
@@ -67,6 +68,14 @@ const multiply = (...ns) => ns.reduce((a, b) => a.times(b));
 const divide = (dividend, divisor) => dividend.div(divisor);
 
 /**
+ * Takes two money objects and returns whether they are equals.
+ * @param {Money} lhs
+ * @param {Money} lhs
+ * @returns { boolean }
+ */
+const equals = (lhs, rhs) => lhs.equals(rhs);
+
+/**
  * Take a base and a comparand and return whether the comparand is less than the base.
  * @param {Money} base
  * @param {Money} comparand
@@ -105,6 +114,7 @@ module.exports = {
   add,
   multiply,
   divide,
+  equals,
   lt,
   gt,
   lte,
