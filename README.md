@@ -321,6 +321,70 @@ Example:
 divide($(8), $(2)).toString() === '4.00'; // true
 ```
 
+## Less Than
+
+Take a base and a comparand and return whether the comparand is less than the base.
+
+```js
+lt(base: Money, comparand: Money) => boolean
+```
+
+Example:
+
+```js
+lt($(7), $(7.009)) === true; // true
+lt($(7), $(7)) === false; // false
+lt($(7), $(6.991)) === false; // false
+```
+
+## Greater Than
+
+Take a base and a comparand and return whether the comparand is greater than the base.
+
+```js
+gt(base: Money, comparand: Money) => boolean
+```
+
+Example:
+
+```js
+gt($(7), $(7.009)) === false; // false
+gt($(7), $(7)) === false; // false
+gt($(7), $(6.991)) === true; // true
+```
+
+## Less Than or Equal to
+
+Take a base and a comparand and return whether the comparand is less than or equal the base.
+
+```js
+lte(base: Money, comparand: Money) => boolean
+```
+
+Example:
+
+```js
+lte($(7), $(7.009)) === true; // true
+lte($(7), $(7)) === true; // true
+lte($(7), $(6.991)) === false; // false
+```
+
+## Greater Than or Equal to
+
+Take a base and a comparand and return whether the comparand is greater than or equal the base.
+
+```js
+gte(base: Money, comparand: Money) => boolean
+```
+
+Example:
+
+```js
+gte($(7), $(7.009)) === false; // false
+gte($(7), $(7)) === true; // true
+gte($(7), $(6.991)) === true; // true
+```
+
 
 ## $$ Ledger
 
