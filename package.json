@@ -1,6 +1,6 @@
 {
   "name": "moneysafe",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Convenient, safe money calculations in JS",
   "main": "src/index.js",
   "scripts": {

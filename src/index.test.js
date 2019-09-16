@@ -7,7 +7,11 @@ import {
   add,
   multiply,
   divide,
-  equals
+  equals,
+  lt,
+  gt,
+  lte,
+  gte
 } from './index.js';
 
 describe('money.map', async assert => {
@@ -112,7 +116,8 @@ describe('Arithmetic utilities: add, multiply, divide, equals', async assert => 
       expected
     });
   }
-
+});
+describe('Comparative utilities: equals', async assert => {
   {
     const actual = equals($(0.3), $(0.3));
     const expected = true;
@@ -132,6 +137,158 @@ describe('Arithmetic utilities: add, multiply, divide, equals', async assert => 
     assert({
       given: 'two different values',
       should: 'return false',
+      actual,
+      expected
+    });
+  }
+});
+
+describe('Comparative utilities: less than', async assert => {
+  {
+    const actual = lt($(7), $(7.009));
+    const expected = true;
+
+    assert({
+      given: 'a base compared to a higher comparand',
+      should: 'return true',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = lt($(7), $(7));
+    const expected = false;
+
+    assert({
+      given: 'a base compared to an equal comparand',
+      should: 'return false',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = lt($(7), $(6.991));
+    const expected = false;
+
+    assert({
+      given: 'a base compared to a lower comparand',
+      should: 'return false',
+      actual,
+      expected
+    });
+  }
+});
+
+describe('Comparative utilities: greater than', async assert => {
+  {
+    const actual = gt($(7), $(7.009));
+    const expected = false;
+
+    assert({
+      given: 'a base compared to a higher comparand',
+      should: 'return false',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = gt($(7), $(7));
+    const expected = false;
+
+    assert({
+      given: 'a base compared to an equal comparand',
+      should: 'return false',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = gt($(7), $(6.991));
+    const expected = true;
+
+    assert({
+      given: 'a base compared to a lower comparand',
+      should: 'return true',
+      actual,
+      expected
+    });
+  }
+});
+
+describe('Comparative utilities: less than or equal to', async assert => {
+  {
+    const actual = lte($(7), $(7.009));
+    const expected = true;
+
+    assert({
+      given: 'a base compared to a higher comparand',
+      should: 'return true',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = lte($(7), $(7));
+    const expected = true;
+
+    assert({
+      given: 'a base compared to an equal comparand',
+      should: 'return true',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = lte($(7), $(6.991));
+    const expected = false;
+
+    assert({
+      given: 'a base compared to a lower comparand',
+      should: 'return false',
+      actual,
+      expected
+    });
+  }
+});
+
+describe('Comparative utilities: greater than or equal to', async assert => {
+  {
+    const actual = gte($(7), $(7.009));
+    const expected = false;
+
+    assert({
+      given: 'a base compared to a higher comparand',
+      should: 'return false',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = gte($(7), $(7));
+    const expected = true;
+
+    assert({
+      given: 'a base compared to an equal comparand',
+      should: 'return true',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = gte($(7), $(6.991));
+    const expected = true;
+
+    assert({
+      given: 'a base compared to a lower comparand',
+      should: 'return true',
       actual,
       expected
     });
