@@ -8,6 +8,7 @@ const createCurrency = ({ decimals }) => {
     const times = b => of(value.multipliedBy(of(b)));
     const div = b => of(value.dividedBy(of(b)));
     const toNumber = () => value.toNumber();
+    const abs = () => of(value.abs());
 
     return Object.assign(plus, {
       [MoneySafe]: true,
@@ -34,6 +35,7 @@ const createCurrency = ({ decimals }) => {
        * @return {Number} [description]
        */
       toNumber: toNumber,
+      abs,
       toString: () => value.toFixed(decimals)
     });
   };

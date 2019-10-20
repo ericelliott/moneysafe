@@ -50,7 +50,7 @@ describe('money.toNumber', async assert => {
   });
 });
 
-describe('Arithmetic utilities: add, multiply, divide', async assert => {
+describe('Arithmetic utilities: add, multiply, divide, abs', async assert => {
   {
     const actual = add($('0.1'), $('0.2')).toString();
     const expected = '0.30';
@@ -111,6 +111,20 @@ describe('Arithmetic utilities: add, multiply, divide', async assert => {
     assert({
       given: 'a dividend and divisor',
       should: 'return the quotient',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = $('-8')
+      .abs()
+      .toString();
+    const expected = $('8').toString();
+
+    assert({
+      given: 'abs used on a negative number',
+      should: 'return the positive number',
       actual,
       expected
     });
