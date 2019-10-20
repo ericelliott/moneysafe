@@ -241,6 +241,19 @@ Example:
 $(2000).toNumber(); // 2000
 ```
 
+### money.abs()
+
+Returns a `Money` object which contains the absolute value.
+
+```js
+money.abs() => Money
+```
+
+Example:
+
+```js
+$('-8').abs().toString() === $('8').toString(); // true
+```
 
 ### money.toString()
 
