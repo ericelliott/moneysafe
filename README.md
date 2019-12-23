@@ -15,7 +15,7 @@ Why? Because JavaScript Numbers are IEEE 754 64-bit floating point. The result i
 ```js
 .2 + .1 === .3; // false
 ```
-However, this problem effectively goes away if you perform the same calculations in arbitrary precision units. Money$afe converts your dollar values into BigNumbers and then exposes arithetic operations like add, multiply, and divide.
+However, this problem effectively goes away if you perform the same calculations in arbitrary precision units. Money$afe converts your dollar values into BigNumbers and then exposes arithmetic operations like add, multiply, and divide.
 
 With Money$afe:
 
@@ -23,7 +23,7 @@ With Money$afe:
 add($(.1), $(.2)).toNumber() === $(.3).toNumber();
 ```
 
-Even better. There's a convenient ledger form for common calculations like shopping carts:
+Even better, there's a convenient ledger form for common calculations like shopping carts:
 
 ```js
 $$(
@@ -85,7 +85,15 @@ $$(
 
 ## How does Money$afe work?
 
-It works by storing and acting on the amounts in cents instead of dollars, which reduces the floating point rounding errors you get when you represent them as decimal dollars. Of course, you'll still get rounding errors with lots of multiplication and division, but errors are less common and less significant when scaled to cents.
+It works by converting currency amounts into [BigNumber](https://github.com/MikeMcl/bignumber.js)s and delegating arithmetic operations to it, which guarantees precision to the number of decimals specified for the currency you are working with.
+
+Two currencies are provided out-of-the-box, dollars (precise to 2 decimal places, exposed via the `$` utility) and Ethereum (precise to 18 decimal places, exposed via the `ethereum` utility), but you can create your own via the `createCurrency` factory:
+
+```js
+import { createCurrency } from 'moneysafe';
+
+const bitcoin = createCurrency({ decimals: 8 });
+```
 
 ## $(dollars) => Money
 
@@ -98,29 +106,44 @@ $(dollars: n) => Money
 Example:
 
 ```js
-$(20).cents; // 2000
+$(20).toFixed(); // '20.00'
 ```
 
-Once a value is represented as money, you can operate on it using normal JavaScript operators. The resulting value will be in cents:
+Once a value is represented as money, you can still operate on it using normal JavaScript operators - *however, doing so will be subject to JavaScript Number coercion and its inherent rounding problems*. You should use the arithmetic functions provided to guarantee precision instead:
 
 ```js
-$(20) / 2; // 1000 cents
+// using JavaScript operators
+$(0.1) + $(0.2); // 0.30000000000000004
+
+// using Money arithmetic functions
+$(0.1).plus(0.2).valueOf(); // 0.3
 ```
 
-## in$ Utility
+## Migrating from version 1
 
-Take a numerical value in cents and convert to a numerical value in dollars, rounded to the nearest cent.
+In version 1, Money$afe would lift dollar amounts into cents, which would allow you to use normal JavaScript operators for arithmetic and then convert the value back into dollars (rounded to the nearest cent) using a `in$` utility.
 
-```$
-in$(cents: n) => dollars: Number
-```
+Since Money$afe no longer lifts amounts into cents (in order to support more currencies), the `in$` utility has been removed.
 
-Since Money$afe allows you to use normal math operators, which work in cents, `in$()` is a convenient way to convert the result back to dollars:
+Since version 2, we recommend using only the provided arithmetic functions (instead of normal JavaScript operators) when working with Money types, and there is no need to convert a lifted Money type back into a dollar amount.
+
+If you want to round a Money value to its nearest supported significant digit, you can use `money.toFixed()`, combined with JavaScript Number coercion if necessary:
 
 ```js
+// v2 example
+import { $ } from 'moneysafe';
+
+const string = $(-45).div(99).toFixed(); // '-0.45'
+const number = +string; // -0.45
+```
+
+For sake of comparison, here's an example of what this might have looked like using Money$afe v1:
+
+```js
+// v1 example - this no longer works!
 import { in$, $ } from 'moneysafe';
 
-in$($(20) / 2) // 10
+const number = in$($(-45) / 99); // -0.45
 ```
 
 ### $ Static Props
