@@ -1,1 +1,1 @@
-module.exports = require('../source/ledger');
+module.exports = require('../src/ledger');
