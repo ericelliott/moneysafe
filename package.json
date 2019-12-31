@@ -1,6 +1,6 @@
 {
   "name": "moneysafe",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Convenient, safe money calculations in JS",
   "main": "src/index.js",
   "scripts": {
@@ -42,6 +42,6 @@
     "watch": "1.0.2"
   },
   "dependencies": {
-    "bignumber.js": "8.1.1"
+    "bignumber.js": "9.0.0"
   }
 }
