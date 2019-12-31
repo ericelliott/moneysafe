@@ -35,7 +35,7 @@
     "eslint-config-prettier": "6.2.0",
     "eslint-plugin-prettier": "3.1.0",
     "esm": "3.2.25",
-    "prettier": "1.18.2",
+    "prettier": "1.19.1",
     "riteway": "6.1.0",
     "tap-nirvana": "1.1.0",
     "updtr": "3.1.0",
