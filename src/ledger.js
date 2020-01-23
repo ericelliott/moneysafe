@@ -7,7 +7,7 @@ const $$ = (...fns) => {
 
 const percent = percent => a => {
   const of = a.constructor.of;
-  return of(a.times(percent * 0.01));
+  return of(a.div(100).times(percent));
 };
 
 const addPercent = p => a => a.add(percent(p)(a));
