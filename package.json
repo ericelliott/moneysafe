@@ -32,7 +32,7 @@
   "homepage": "https://github.com/ericelliott/moneysafe#readme",
   "devDependencies": {
     "eslint": "6.3.0",
-    "eslint-config-prettier": "6.2.0",
+    "eslint-config-prettier": "6.15.0",
     "eslint-plugin-prettier": "3.1.0",
     "esm": "3.2.25",
     "prettier": "1.18.2",
