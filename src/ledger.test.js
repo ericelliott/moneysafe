@@ -60,3 +60,35 @@ describe('subtract(percent)', async assert => {
     expected
   });
 });
+
+describe('addPercent with 0 decimals', async assert => {
+  const money = createCurrency({ decimals: 0 });
+
+  {
+    const actual = $$(money(100), addPercent(13)).toNumber();
+    const expected = 113;
+
+    assert({
+      given: 'a percentage added to a currency with zero decimals',
+      should: 'add the percentage correctly',
+      actual,
+      expected
+    });
+  }
+});
+
+describe('subtractPercent with 0 decimals', async assert => {
+  const money = createCurrency({ decimals: 0 });
+
+  {
+    const actual = $$(money(100), subtractPercent(13)).toNumber();
+    const expected = 87;
+
+    assert({
+      given: 'a percentage subtracted from a currency with zero decimals',
+      should: 'subtract the percentage correctly',
+      actual,
+      expected
+    });
+  }
+});

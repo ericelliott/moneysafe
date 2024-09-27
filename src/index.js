@@ -5,7 +5,10 @@ const MoneySafe = Symbol('MoneySafe');
 const createCurrency = ({ decimals }) => {
   const of = (input, value = new BigNumber(String(input))) => {
     const plus = b => of(value.plus(of(b)));
-    const times = b => of(value.multipliedBy(of(b)));
+    const times = b => {
+      const result = value.multipliedBy(of(b));
+      return decimals === 0 ? of(result.integerValue()) : of(result);
+    };
     const div = b => of(value.dividedBy(of(b)));
     const toNumber = () => value.toNumber();
     const abs = () => of(value.abs());
