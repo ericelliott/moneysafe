@@ -1,4 +1,5 @@
 import describe from 'riteway';
+
 import './ledger.test.js';
 import {
   ethereum as eth,
@@ -103,6 +104,7 @@ describe('Arithmetic utilities: add, multiply, divide, abs', async assert => {
       expected
     });
   }
+
 
   {
     const actual = divide($(8), $(2)).toString();

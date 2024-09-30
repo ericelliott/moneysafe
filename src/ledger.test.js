@@ -1,7 +1,7 @@
 import describe from 'riteway';
 
-import { ethereum as $ } from './index';
-import { $$, addPercent, subtractPercent, createCurrency } from './ledger';
+import { ethereum as $, createCurrency } from './index';
+import { $$, addPercent, subtractPercent } from './ledger';
 
 describe('$$', async assert => {
   const should = 'total $(x) amounts';
