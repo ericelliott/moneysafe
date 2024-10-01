@@ -1,6 +1,6 @@
 {
   "name": "moneysafe",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Convenient, safe money calculations in JS",
   "main": "src/index.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "watch": "watch 'clear && npm run -s lint && npm run -s test' src",
     "verify": "npm run -s test && npm run -s lint",
     "precommit": "npm run verify",
-    "update": "updtr"
+    "update": "updtr",
+    "release": "release-it"
   },
   "repository": {
     "type": "git",
@@ -31,17 +32,18 @@
   },
   "homepage": "https://github.com/ericelliott/moneysafe#readme",
   "devDependencies": {
-    "eslint": "6.3.0",
-    "eslint-config-prettier": "6.2.0",
-    "eslint-plugin-prettier": "3.1.0",
+    "eslint": "^9.11.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "esm": "3.2.25",
-    "prettier": "1.18.2",
-    "riteway": "6.1.0",
+    "prettier": "^3.3.3",
+    "release-it": "^17.6.0",
+    "riteway": "^7.1.0",
     "tap-nirvana": "1.1.0",
-    "updtr": "3.1.0",
+    "updtr": "^4.1.0",
     "watch": "1.0.2"
   },
   "dependencies": {
-    "bignumber.js": "9.0.0"
+    "bignumber.js": "9.1.2"
   }
 }
