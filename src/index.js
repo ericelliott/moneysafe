@@ -2,11 +2,15 @@ const BigNumber = require('bignumber.js');
 
 const MoneySafe = Symbol('MoneySafe');
 
+const op = input => BigNumber(input);
+
 const createCurrency = ({ decimals }) => {
-  const of = (input, value = new BigNumber(String(input))) => {
-    const plus = b => of(value.plus(of(b)));
-    const times = b => of(value.multipliedBy(of(b)));
-    const div = b => of(value.dividedBy(of(b)));
+  const of = (input, value = op(input)) => {
+    const plus = b => of(value.plus(op(b)));
+    const times = b => {
+      return of(value.multipliedBy(op(b)));
+    };
+    const div = b => of(value.dividedBy(op(b)));
     const toNumber = () => value.toNumber();
     const abs = () => of(value.abs());
 
@@ -21,11 +25,11 @@ const createCurrency = ({ decimals }) => {
       multipliedBy: times,
       div,
       dividedBy: div,
-      minus: b => of(value.minus(of(b))),
-      lt: b => value.isLessThan(of(b)),
-      gt: b => value.isGreaterThan(of(b)),
-      lte: b => value.isLessThanOrEqualTo(of(b)),
-      gte: b => value.isGreaterThanOrEqualTo(of(b)),
+      minus: b => of(value.minus(op(b))),
+      lt: b => value.isLessThan(op(b)),
+      gt: b => value.isGreaterThan(op(b)),
+      lte: b => value.isLessThanOrEqualTo(op(b)),
+      gte: b => value.isGreaterThanOrEqualTo(op(b)),
       toFixed: (digits = decimals) => value.toFixed(digits),
 
       /**

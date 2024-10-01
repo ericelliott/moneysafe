@@ -1,4 +1,5 @@
 import describe from 'riteway';
+
 import './ledger.test.js';
 import {
   ethereum as eth,
@@ -125,6 +126,40 @@ describe('Arithmetic utilities: add, multiply, divide, abs', async assert => {
     assert({
       given: 'abs used on a negative number',
       should: 'return the positive number',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const money = createCurrency({ decimals: 0 });
+
+    const actual = money(100)
+      .multipliedBy(2.5)
+      .toNumber();
+    const expected = 250;
+
+    assert({
+      given:
+        'a currency with zero decimals multiplied by a decimal number without a leading zero',
+      should: 'multiply correctly',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const money = createCurrency({ decimals: 0 });
+
+    const actual = money(100)
+      .multipliedBy(0.13)
+      .toNumber();
+    const expected = 13;
+
+    assert({
+      given:
+        'a currency with zero decimals multiplied by a decimal number with a leading zero',
+      should: 'multiply correctly',
       actual,
       expected
     });
