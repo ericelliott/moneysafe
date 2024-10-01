@@ -2,7 +2,7 @@ const BigNumber = require('bignumber.js');
 
 const MoneySafe = Symbol('MoneySafe');
 
-const op = (input) => BigNumber(input);
+const op = input => BigNumber(input);
 
 const createCurrency = ({ decimals }) => {
   const of = (input, value = op(input)) => {
