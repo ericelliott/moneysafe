@@ -311,6 +311,21 @@ const pow = exp => m => Array.from(
 +$(2).map(pow(2)); // 4
 ```
 
+### money.equals()
+
+Compares the value of two Money objects and returns true if they are equal, false otherwise.
+
+```js
+money.equals(other: Money) => boolean
+```
+
+Example:
+
+```js
+$(7).equals($(7)); // true
+$(7).equals($(7.009)); // false
+$(7).equals($(6.991)); // false
+```
 
 ## Utility functions
 
@@ -421,6 +436,21 @@ gte($(7), $(7)) === true; // true
 gte($(7), $(6.991)) === true; // true
 ```
 
+## Equals
+
+Take a base and a comparand and return whether the comparand is equal to the base.
+
+```js
+equals(base: Money, comparand: Money) => boolean
+```
+
+Example:
+
+```js
+equals($(7), $(7)) === true; // true
+equals($(7), $(7.009)) === false; // false
+equals($(7), $(6.991)) === false; // false
+```
 
 ## $$ Ledger
 

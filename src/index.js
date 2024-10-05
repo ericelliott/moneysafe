@@ -13,6 +13,7 @@ const createCurrency = ({ decimals }) => {
     const div = b => of(value.dividedBy(op(b)));
     const toNumber = () => value.toNumber();
     const abs = () => of(value.abs());
+    const equals = b => value.isEqualTo(op(b));
 
     return Object.assign(plus, {
       [MoneySafe]: true,
@@ -40,6 +41,7 @@ const createCurrency = ({ decimals }) => {
        */
       toNumber: toNumber,
       abs,
+      equals,
       toString: () => value.toFixed(decimals)
     });
   };
@@ -104,6 +106,14 @@ const lte = (base, comparand) => base.lte(comparand);
  */
 const gte = (base, comparand) => base.gte(comparand);
 
+/**
+ * Take a base and a comparand and return whether the comparand is equal to the base.
+ * @param {Money} base
+ * @param {Money} comparand
+ * @returns { boolean }
+ */
+const equals = (base, comparand) => base.equals(comparand);
+
 module.exports = {
   createCurrency,
   $,
@@ -114,5 +124,6 @@ module.exports = {
   lt,
   gt,
   lte,
-  gte
+  gte,
+  equals
 };

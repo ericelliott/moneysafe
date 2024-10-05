@@ -11,7 +11,8 @@ import {
   lt,
   gt,
   lte,
-  gte
+  gte,
+  equals
 } from './index.js';
 
 describe('money.map', async assert => {
@@ -312,6 +313,44 @@ describe('Comparative utilities: greater than or equal to', async assert => {
     assert({
       given: 'a base compared to a lower comparand',
       should: 'return true',
+      actual,
+      expected
+    });
+  }
+});
+
+describe('Comparative utilities: equals', async assert => {
+  {
+    const actual = equals($(7), $(7));
+    const expected = true;
+
+    assert({
+      given: 'two equal money objects',
+      should: 'return true',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = equals($(7), $(7.009));
+    const expected = false;
+
+    assert({
+      given: 'two unequal money objects',
+      should: 'return false',
+      actual,
+      expected
+    });
+  }
+
+  {
+    const actual = $(7).equals($(6.991));
+    const expected = false;
+
+    assert({
+      given: 'two unequal money objects using the equals method',
+      should: 'return false',
       actual,
       expected
     });
