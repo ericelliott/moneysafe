@@ -37,7 +37,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "esm": "3.2.25",
     "prettier": "^3.3.3",
-    "release-it": "^17.7.0",
+    "release-it": "^19.0.0",
     "riteway": "^7.1.0",
     "tap-nirvana": "1.1.0",
     "updtr": "^4.1.0",
