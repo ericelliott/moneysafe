@@ -2,7 +2,17 @@ const BigNumber = require('bignumber.js');
 
 const MoneySafe = Symbol('MoneySafe');
 
-const op = input => BigNumber(input);
+const op = input => {
+  // A Money object carries an unrounded internal value. Coercing it with
+  // BigNumber(input) would stringify via toString (rounded to the currency
+  // precision), so unwrap the internal value to keep full precision.
+  if (input && input[MoneySafe]) {
+    let value;
+    input.map(internal => (value = internal));
+    return value;
+  }
+  return BigNumber(input);
+};
 
 const createCurrency = ({ decimals }) => {
   const of = (input, value = op(input)) => {

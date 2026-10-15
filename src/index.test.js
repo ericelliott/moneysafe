@@ -166,6 +166,35 @@ describe('Arithmetic utilities: add, multiply, divide, abs', async assert => {
   }
 });
 
+describe('Operands keep full precision (README: "Not rounded")', async assert => {
+  {
+    const standalone = $('1.119').toFixed(3);
+    const asOperand = $(0)
+      .plus($('1.119'))
+      .toFixed(3);
+
+    assert({
+      given:
+        'a value with more digits than the currency precision used as an operand',
+      should: 'use the unrounded value, matching the standalone value',
+      actual: asOperand,
+      expected: standalone
+    });
+  }
+
+  {
+    const actual = add($('0.114'), $('0.114'), $('0.114')).toFixed(3);
+    const expected = '0.342';
+
+    assert({
+      given: 'three sub-cent values summed with add',
+      should: 'sum the unrounded operands',
+      actual,
+      expected
+    });
+  }
+});
+
 describe('Comparative utilities: less than', async assert => {
   {
     const actual = lt($(7), $(7.009));
